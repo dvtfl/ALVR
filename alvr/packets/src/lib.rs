@@ -343,11 +343,11 @@ pub fn parse_path(path: &str) -> Vec<PathSegment> {
 pub enum ClientListAction {
     AddIfMissing {
         trusted: bool,
-        manual_ips: Vec<IpAddr>,
+        manual_ips: Vec<String>,
     },
     SetDisplayName(String),
     Trust,
-    SetManualIps(Vec<IpAddr>),
+    SetManualIps(Vec<String>),
     RemoveEntry,
     UpdateCurrentIp(Option<IpAddr>),
     SetConnectionState(ConnectionState),

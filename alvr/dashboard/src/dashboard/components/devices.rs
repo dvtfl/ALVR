@@ -118,21 +118,18 @@ impl DevicesTab {
                         }
 
                         if ui[1].button("Save").clicked() {
-                            let manual_ips =
-                                state.ips.iter().filter_map(|s| s.parse().ok()).collect();
-
                             if state.new_devices {
                                 requests.push(ServerRequest::UpdateClientList {
                                     hostname: state.hostname,
                                     action: ClientListAction::AddIfMissing {
                                         trusted: true,
-                                        manual_ips,
+                                        manual_ips: state.ips,
                                     },
                                 });
                             } else {
                                 requests.push(ServerRequest::UpdateClientList {
                                     hostname: state.hostname,
-                                    action: ClientListAction::SetManualIps(manual_ips),
+                                    action: ClientListAction::SetManualIps(state.ips),
                                 });
                             }
                         } else {

@@ -32,7 +32,7 @@ use alvr_sockets::{
 };
 use std::{
     collections::HashMap,
-    net::IpAddr,
+    net::{IpAddr, ToSocketAddrs},
     process::Command,
     sync::{mpsc::RecvTimeoutError, Arc},
     thread,
@@ -255,8 +255,17 @@ pub fn handshake_loop(ctx: Arc<ConnectionContext>, lifecycle_state: Arc<RwLock<L
                 .iter()
                 .filter(|(_, info)| info.connection_state == ConnectionState::Disconnected)
             {
-                for ip in &connection_info.manual_ips {
-                    manual_client_ips.insert(*ip, hostname.clone());
+                for address in &connection_info.manual_ips {
+                    match format!("{address}:0").to_socket_addrs() {
+                        Ok(addrs) => {
+                            for addr in addrs {
+                                manual_client_ips.insert(addr.ip(), hostname.clone());
+                            }
+                        }
+                        Err(e) => {
+                            error!("Failed to parse manual IP \"{address}\": {e}");
+                        }
+                    };
                 }
             }
             manual_client_ips

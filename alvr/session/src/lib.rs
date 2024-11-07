@@ -126,7 +126,7 @@ pub struct OpenvrConfig {
 pub struct ClientConnectionConfig {
     pub display_name: String,
     pub current_ip: Option<IpAddr>,
-    pub manual_ips: HashSet<IpAddr>,
+    pub manual_ips: HashSet<String>,
     pub trusted: bool,
     pub connection_state: ConnectionState,
     pub cabled: bool,
